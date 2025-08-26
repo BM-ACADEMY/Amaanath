@@ -4,3 +4,23 @@
   font-family: 'Quicksand', sans-serif;
 }
 
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px; /* width of vertical scrollbar */
+  height: 5px; /* height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #1d1d1d; /* track background */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f0b100; /* scrollbar color */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d99b00; /* darker shade on hover */
+}
+
