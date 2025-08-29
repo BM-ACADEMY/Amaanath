@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../../assets/img/logo.png"; // Logo image
 import { RxDashboard } from "react-icons/rx";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [activeLink, setActiveLink] = useState("Home");
@@ -43,7 +44,7 @@ const Header = () => {
           {/* Logo Section */}
           <div className="flex items-center space-x-4 justify-start">
             <div className="w-24 h-20 flex items-center justify-center text-gray-700 font-bold">
-              <img src={Logo} alt="Logo" />
+              <Link to="/"> <img src={Logo} alt="Logo" /></Link>
             </div>
             <div className="hidden lg:block h-20 border-l border-[#d3d0c656]"></div>
           </div>

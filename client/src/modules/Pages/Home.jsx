@@ -1,5 +1,5 @@
 import React from "react";
-import Banner from "../../assets/img/banner.jpg";
+import Banner from "../../assets/img/banner.png";
 
 const Home = () => {
   return (
@@ -8,7 +8,7 @@ const Home = () => {
       style={{ backgroundImage: `url(${Banner})` }}
     >
       {/* Centered Content (Fully Left Aligned) */}
-      <div className="absolute bg-black/30 inset-0 flex items-center">
+      <div className="absolute bg-black/50 inset-0 flex items-center">
         <div className="max-w-2xl ml-6 sm:ml-10 md:ml-16 lg:ml-20">
           <p className="text-[#f0b100]  text-sm sm:text-base md:text-lg lg:text-xl mb-3 flex items-center gap-3">
             WELCOME TO OUR PROPERTY.
