@@ -36,7 +36,9 @@ app.use(
 app.use("/api/main-headings", mainHeadingRoutes);
 app.use("/api/sub-headings", subHeadingRoutes);
 app.use("/api/contents", realEstateContentRoutes);
-
+app.get("/", (req, res) => {
+  res.json({ message: "✅ Test route is working!" });
+});
 
 // Start Server
 const PORT = process.env.PORT || 5000;
