@@ -1,4 +1,6 @@
+// server.js
 const express = require("express");
+const path = require("path");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -34,6 +36,7 @@ app.use(
 app.use("/api/main-headings", mainHeadingRoutes);
 app.use("/api/sub-headings", subHeadingRoutes);
 app.use("/api/contents", realEstateContentRoutes);
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;

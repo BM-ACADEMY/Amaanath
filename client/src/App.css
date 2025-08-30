@@ -24,3 +24,8 @@
   background: #d99b00; /* darker shade on hover */
 }
 
+
+html {
+  scroll-padding-top: 80px; /* height of your fixed header */
+}
+

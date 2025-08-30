@@ -37,7 +37,7 @@ const UserFeedback = () => {
   const { text, name, role, avatar } = reviews[current];
 
   return (
-    <div className="relative max-w-4xl mx-auto px-4 py-16 flex flex-col items-center">
+    <div className="relative max-w-4xl mx-auto px-4 py-16 flex flex-col items-center" id="testimonials">
       {/* Centered Logo */}
       <img src={Logo} alt="Logo" className="w-20 h-20 mb-6" />
 

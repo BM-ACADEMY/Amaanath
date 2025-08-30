@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 
 const getContentByCodeName = async (req, res) => {
   try {
-    const content = await RealEstateContent.findOne({ code_name: req.params.code_name })
+    const content = await RealEstateContent.findOne({
+      code_name: req.params.code_name,
+    })
       .populate("main_heading")
       .populate("sub_heading");
     if (!content) return res.status(404).json({ message: "Content not found" });
@@ -62,19 +64,41 @@ const getContentById = async (req, res) => {
 
 const updateContent = async (req, res) => {
   try {
-    const { description, ...otherFields } = req.body;
+    const { description, existing_images, ...otherFields } = req.body;
     let updateData = { ...otherFields };
+
     if (description) {
-      updateData.description = description.split(",");
+      updateData.description = description.split(",").filter(Boolean);
     }
-    if (req.files && req.files.length > 0) {
-      updateData.images = req.files.map((file) => file.path);
+
+    let existingImagesFromBody = [];
+    if (existing_images) {
+      try {
+        existingImagesFromBody = JSON.parse(existing_images);
+        if (!Array.isArray(existingImagesFromBody)) existingImagesFromBody = [];
+      } catch (parseErr) {
+        if (Array.isArray(existing_images))
+          existingImagesFromBody = existing_images;
+        else
+          existingImagesFromBody = String(existing_images)
+            .split(",")
+            .filter(Boolean);
+      }
     }
+
+    const uploadedImages =
+      req.files && req.files.length > 0
+        ? req.files.map((file) => file.path)
+        : [];
+
+    updateData.images = [...existingImagesFromBody, ...uploadedImages];
+
     const content = await RealEstateContent.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     );
+
     res.json(content);
   } catch (err) {
     res.status(400).json({ error: err.message });

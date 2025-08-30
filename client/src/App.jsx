@@ -12,10 +12,13 @@ import { PropertyDetails } from "./modules/auth/PropertyDetails";
 import Uploadsection from "./modules/Admin/Uploadsection";
 import { ScrollToTop } from "./modules/ScrollToTop";
 import { Sell } from "./modules/Pages/Sell/Sell";
+import ScrollToTopButton from "./modules/Layout/ScrollToTopButton";
+import { BusinessDeal } from "./modules/Pages/BusinessDeal/BusinessDeal";
 
 function App() {
   return (
     <Router>
+      <ScrollToTopButton/>
       <ScrollToTop />
       <Layout />
     </Router>
@@ -29,19 +32,18 @@ function Layout() {
   return (
     <>
       {!hideFooter && <Header />}
+     <Header />
       <Routes>
         <Route path="/" element={<Homesection />} />
         <Route path="/buy" element={<Buy />} />
         <Route path="/buy/:id" element={<PropertyDetails />} />
         <Route path="/sell/:id" element={<PropertyDetails />} />
         <Route path="/sell" element={<Sell />} />
-        <Route
-          path="/business-deal"
-          element={<h1 className="p-10">Business Deal Page</h1>}
-        />
+        <Route path="/business-deal" element={<BusinessDeal/>}/>
         <Route path="/admin" element={<Uploadsection />} />
       </Routes>
-      {!hideFooter && <Footer />}
+      {/* {!hideFooter && <Footer />} */}
+ <Footer />
     </>
   );
 }

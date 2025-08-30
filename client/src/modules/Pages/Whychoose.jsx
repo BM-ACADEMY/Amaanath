@@ -19,7 +19,7 @@ const features = [
 
 const Whychoose = () => {
   return (
-    <div className="bg-[#bf9410] text-white py-16 px-4">
+    <div className="bg-[#bf9410] text-white py-16 px-4" id="whychoose">
       <div className="max-w-7xl mx-auto text-center">
         <div className="flex items-center justify-center mt-4">
           <p className="uppercase font-bold text-lg mb-2">Features</p>

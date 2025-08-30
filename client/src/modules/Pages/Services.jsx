@@ -30,7 +30,7 @@ const Servcies = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-black text-white flex items-center justify-center px-4 sm:px-8 py-10 sm:py-14">
+    <div className="bg-black text-white flex items-center justify-center px-4 sm:px-8 py-10 sm:py-14" id="about">
       <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-center max-w-7xl w-full">
         {/* Left Side - House Plan Image */}
         <div className="overflow-hidden shadow-2xl rounded-xl">

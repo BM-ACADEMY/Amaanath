@@ -3,7 +3,7 @@ import Banner from "../../assets/img/banner.png";
 
 const Home = () => {
   return (
-    <div
+    <div id="home"
       className="relative h-screen bg-cover bg-center text-white font-sans"
       style={{ backgroundImage: `url(${Banner})` }}
     >

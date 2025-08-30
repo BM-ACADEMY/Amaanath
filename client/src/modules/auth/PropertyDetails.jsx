@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import LightGallery from 'lightgallery/react';
-import lgThumbnail from 'lightgallery/plugins/thumbnail';
-import 'lightgallery/css/lightgallery.css';
-import 'lightgallery/css/lg-thumbnail.css';
+import LightGallery from "lightgallery/react";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-thumbnail.css";
+import { FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
 
 export const PropertyDetails = () => {
   const { id } = useParams();
@@ -36,7 +37,7 @@ export const PropertyDetails = () => {
   const shareToWhatsApp = () => {
     if (!content) return;
 
-    const phoneNumber = "9952787198"; // Specified WhatsApp number
+    const phoneNumber = "9952787198";
     const message = `
 Property Details (${section}):
 Code Name: ${content.code_name}
@@ -47,96 +48,129 @@ ${content.description.map((desc) => `- ${desc}`).join("\n")}
     `.trim();
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`; // Updated to include phone number
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 
-  if (loading) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-  );
-  
-  if (error) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <div className="text-red-500 text-xl mb-2">Error</div>
-        <p className="text-gray-700">{error}</p>
+  const phoneNumber = "+91 98765 43210";
+
+  const handleImageClick = (index) => {
+    if (lightGalleryRef.current) {
+      lightGalleryRef.current.openGallery(index);
+    } else {
+      console.warn("LightGallery is not initialized yet.");
+    }
+  };
+
+  if (loading)
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
-    </div>
-  );
-  
-  if (!content) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <p className="text-gray-700">Property not found</p>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="text-red-500 text-xl mb-2">Error</div>
+          <p className="text-gray-700">{error}</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+
+  if (!content)
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <p className="text-gray-700">Property not found</p>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen mt-22 bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen mt-22 bg-gradient-to-br from-[#f7f7f7] via-[#fdf5e6] to-[#fef2f2] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-[#fefefe] to-[#f7f7f7] border border-gray-200 rounded-2xl shadow-md p-6 mb-8">
+          <div className="flex flex-col  md:flex-row md:items-center justify-between gap-6">
             <div>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${isBuy ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800'}`}>
-                {section}
-              </span>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+              <h1 className="text-3xl font-quicksand font-extrabold text-gray-900 tracking-tight">
                 {content.main_heading.name}
               </h1>
-              <p className="text-gray-600 mt-1">{content.sub_heading.name}</p>
+              <p className="text-lg text-gray-600 mt-1">
+                {content.sub_heading.name}
+              </p>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={shareToWhatsApp}
-                className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.019-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-.719-.911-.99-.242-.272-.487-.247-.669-.247-.173 0-.347.025-.52.074-.173.099-.694.347-.94.644-.247.297-.297.644-.297 1.064 0 .42.074.867.223 1.261.149.394.936 2.033 2.273 2.852.99.606 1.737.892 2.828 1.14.396.099.694.148.991.148.297 0 .545-.099.743-.297.198-.198.396-.471.594-.719.198-.247.396-.495.545-.644.149-.149.297-.247.446-.247.149 0 .297.05.422.149.124.099.768.668.916.816.149.149.223.297.223.446 0 .149-.074.347-.223.495-.149.149-.347.223-.545.223zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.957c-6.075 0-11-4.925-11-11s4.925-11 11-11 11 4.925 11 11-4.925 11-11 11z" />
-                </svg>
-                Share on WhatsApp
-              </button>
-              
-              <div className="bg-gray-100 px-4 py-2 rounded-md">
-                <span className="text-xs text-gray-500 block">Property Code</span>
-                <span className="text-gray-900 font-medium">{content.code_name}</span>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="bg-[#d6b24f50] px-5 py-3 rounded-lg border border-[#d6b24f] text-center">
+                <span className="text-xs uppercase tracking-wide text-gray-700 block">
+                  Property Code
+                </span>
+                <span className="text-lg font-semibold text-blue-900">
+                  {content.code_name}
+                </span>
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Image Gallery */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Property Images</h2>
           
           {content.images && content.images.length > 0 ? (
-            <LightGallery
-              ref={lightGalleryRef}
-              elementClassNames="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-              speed={500}
-              plugins={[lgThumbnail]}
-            >
-              {content.images.map((image, index) => (
-                <a
-                  key={index}
-                  href={image}
-                  className="block overflow-hidden rounded-lg cursor-pointer group"
-                  data-sub-html={`<h4>Image ${index + 1}</h4><p>${content.main_heading.name}</p>`}
-                >
-                  <div className="aspect-w-16 aspect-h-12">
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {content.images.slice(0, 3).map((image, index) => (
+                  <div
+                    key={index}
+                    className="relative block overflow-hidden rounded-lg cursor-pointer group hover:shadow-lg transition-shadow duration-300"
+                    onClick={() => handleImageClick(index)}
+                  >
+                    <div className="aspect-w-16 aspect-h-12">
+                      <img
+                        src={image}
+                        alt={`Property image ${index + 1}`}
+                        className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-105 group-hover:opacity-80"
+                      />
+                      {index === 2 && content.images.length > 3 && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                          <span className="text-white text-lg font-semibold">
+                            +{content.images.length - 3} more
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <LightGallery
+                ref={lightGalleryRef}
+                onInit={(detail) => {
+                  lightGalleryRef.current = detail.instance;
+                }}
+                elementClassNames="hidden"
+                speed={500}
+                plugins={[lgThumbnail]}
+              >
+                {content.images.map((image, index) => (
+                  <a
+                    key={index}
+                    href={image}
+                    className="block overflow-hidden rounded-lg cursor-pointer group"
+                    data-sub-html={`<h4>Image ${index + 1}</h4><p>${content.main_heading.name}</p>`}
+                  >
                     <img
                       src={image}
                       alt={`Property image ${index + 1}`}
-                      className="object-cover w-full h-64 transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover w-full h-64"
                     />
-                  </div>
-                </a>
-              ))}
-            </LightGallery>
+                  </a>
+                ))}
+              </LightGallery>
+            </>
           ) : (
             <div className="text-center py-12 bg-gray-100 rounded-lg">
               <svg className="h-12 w-12 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,47 +180,106 @@ ${content.description.map((desc) => `- ${desc}`).join("\n")}
             </div>
           )}
         </div>
-        
         {/* Property Details */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Details</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Overview</h3>
-              <dl className="space-y-3">
-                <div className="bg-gray-50 px-4 py-3 rounded-lg">
-                  <dt className="text-sm font-medium text-gray-500">Main Category</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{content.main_heading.name}</dd>
+        <div className="bg-white rounded-xl shadow-md p-8 mb-8 transition-all duration-300 hover:shadow-lg">
+          <h2 className="text-2xl font-bold font-quicksand text-gray-900 mb-6 border-b-2 border-gray-200 pb-2">
+            Property Details
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <svg
+                  className="h-6 w-6 text-blue-500 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Overview
+              </h3>
+              <dl className="space-y-4">
+                <div className="flex flex-col">
+                  <dt className="text-sm font-medium text-gray-600">
+                    Main Category
+                  </dt>
+                  <dd className="mt-1 text-base text-gray-900 font-medium">
+                    {content.main_heading.name}
+                  </dd>
                 </div>
-                
-                <div className="bg-gray-50 px-4 py-3 rounded-lg">
-                  <dt className="text-sm font-medium text-gray-500">Sub Category</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{content.sub_heading.name}</dd>
+
+                <div className="flex flex-col">
+                  <dt className="text-sm font-medium text-gray-600">
+                    Sub Category
+                  </dt>
+                  <dd className="mt-1 text-base text-gray-900 font-medium">
+                    {content.sub_heading.name}
+                  </dd>
                 </div>
-                
-                <div className="bg-gray-50 px-4 py-3 rounded-lg">
-                  <dt className="text-sm font-medium text-gray-500">Property Code</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{content.code_name}</dd>
+
+                <div className="flex flex-col">
+                  <dt className="text-sm font-medium text-gray-600">
+                    Property Code
+                  </dt>
+                  <dd className="mt-1 text-base text-gray-900 font-medium">
+                    {content.code_name}
+                  </dd>
                 </div>
               </dl>
             </div>
-            
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Description</h3>
-              <div className="bg-gray-50 px-4 py-4 rounded-lg">
-                <ul className="space-y-2">
-                  {content.description.map((desc, i) => (
-                    <li key={i} className="flex items-start">
-                      <svg className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-gray-700">{desc}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <svg
+                  className="h-6 w-6 text-blue-500 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  />
+                </svg>
+                Details
+              </h3>
+              <ul className="space-y-3">
+                {content.description.map((desc, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="text-gray-700 text-base leading-relaxed">
+                      {desc}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
+          </div>
+
+          {/* Contact Button */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={shareToWhatsApp}
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              <FaWhatsapp className="h-5 w-5 mr-2" />
+              Contact via WhatsApp
+            </button>
+
+            <a
+              href={`tel:${phoneNumber}`}
+              className="inline-flex items-center justify-center px-6 py-3 rounded-md shadow-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
+            >
+              <FaPhoneAlt className="h-5 w-5 mr-2" />
+              {phoneNumber}
+            </a>
           </div>
         </div>
       </div>
