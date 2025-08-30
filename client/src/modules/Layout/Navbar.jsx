@@ -1,48 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../../assets/img/logo.png";
 import { RxDashboard } from "react-icons/rx";
-import { Link } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
+
   const [activeLink, setActiveLink] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
   const [isRightOffcanvasOpen, setIsRightOffcanvasOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileDropdown, setMobileDropdown] = useState(null);
 
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
- const mainNavLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { 
-    name: "Services", 
-    href: "#services",
-    dropdown: [
-      { name: "Buy", path: "/buy" },
-      { name: "Sell", path: "/sell" },
-      { name: "Business Deal", path: "/business-deal" }
-    ]
-  },
-  { name: "Why Choose", href: "#whychoose" },
-  { name: "Testimonials", href: "#testimonials" },
-];
+  // Close desktop dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
+  const mainNavLinks = [
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    {
+      name: "Services",
+      href: "#services",
+      dropdown: [
+        { name: "Buy", path: "/buy" },
+        { name: "Sell", path: "/sell" },
+        { name: "Business Deal", path: "/business-deal" },
+      ],
+    },
+    { name: "Why Choose", href: "#whychoose" },
+    { name: "Testimonials", href: "#testimonials" },
+  ];
 
-  // Smooth scroll to section
- const navigateTo = (e, name, href) => {
+  const navigateTo = (e, name, href) => {
     e.preventDefault();
     setActiveLink(name);
     setIsOffcanvasOpen(false);
@@ -50,7 +59,6 @@ const Header = () => {
 
     if (href && href.startsWith("#")) {
       if (location.pathname !== "/") {
-        // Go to home page first, then scroll
         navigate("/", { state: { scrollTo: href } });
       } else {
         const element = document.querySelector(href);
@@ -70,7 +78,7 @@ const Header = () => {
         }`}
       >
         <div className="px-4 md:px-8 lg:px-16 flex justify-between items-center">
-          {/* Logo Section */}
+          {/* Logo */}
           <div className="flex items-center space-x-4 justify-start">
             <div className="w-24 h-20 flex items-center justify-center text-gray-700 font-bold">
               <Link to="/">
@@ -80,53 +88,47 @@ const Header = () => {
             <div className="hidden lg:block h-20 border-l border-[#d3d0c656]"></div>
           </div>
 
-          {/* Main Navigation Links - Desktop */}
-          <div className="hidden lg:flex items-center space-x-8 relative">
-  {mainNavLinks.map((item) => (
-    <div 
-      key={item.name} 
-      className="relative"
-      onMouseEnter={() => setOpenDropdown(item.name)}
-      onMouseLeave={() => setOpenDropdown(null)}
-    >
-      <a
-        href={item.href}
-        className={`text-base font-semibold transition-colors duration-200 ${
-          activeLink === item.name
-            ? "text-[#ce9e0e]"
-            : "text-gray-200 hover:text-[#b68d10]"
-        }`}
-        onClick={(e) => navigateTo(e, item.name, item.href)}
-      >
-        {item.name}
-      </a>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8 relative" ref={dropdownRef}>
+            {mainNavLinks.map((item) => (
+              <div key={item.name} className="relative">
+                <button
+                  onClick={() =>
+                    setOpenDropdown(openDropdown === item.name ? null : item.name)
+                  }
+                  className={`text-base font-semibold transition-colors duration-200 ${
+                    activeLink === item.name
+                      ? "text-[#ce9e0e]"
+                      : "text-gray-200 hover:text-[#b68d10]"
+                  }`}
+                >
+                  {item.name}
+                </button>
 
-      {/* Dropdown Menu */}
-      {item.dropdown && openDropdown === item.name && (
-        <div className="absolute top-full left-0 mt-2 w-48 bg-black shadow-lg rounded-md py-2 z-50">
-          {item.dropdown.map((dropItem) => (
-            <Link
-              key={dropItem.name}
-              to={dropItem.path}
-              className="block px-4 py-2 text-gray-200 hover:text-[#b68d10] hover:bg-[#111111]"
-              onClick={() => {
-                setActiveLink(item.name);
-                setOpenDropdown(null);
-              }}
-            >
-              {dropItem.name}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  ))}
-</div>
-
+                {/* Dropdown */}
+                {item.dropdown && openDropdown === item.name && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-black shadow-lg rounded-md py-2 z-50">
+                    {item.dropdown.map((dropItem) => (
+                      <Link
+                        key={dropItem.name}
+                        to={dropItem.path}
+                        className="block px-4 py-2 text-gray-200 hover:text-[#b68d10] hover:bg-[#111111]"
+                        onClick={() => {
+                          setActiveLink(item.name);
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        {dropItem.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
 
           {/* Right-side content */}
           <div className="flex items-center space-x-4">
-            {/* Schedule Button */}
             <a
               href="#"
               className="hidden lg:flex items-center justify-center space-x-2 bg-[#b68d10] text-white px-6 py-3 rounded-xl font-semibold transition duration-200 hover:bg-white hover:text-black"
@@ -153,7 +155,7 @@ const Header = () => {
 
             <div className="hidden lg:block h-20 border-l border-[#d3d0c656]"></div>
 
-            {/* Dashboard Icon */}
+            {/* Dashboard */}
             <div className="hidden lg:block">
               <button
                 onClick={() => setIsRightOffcanvasOpen(true)}
@@ -163,7 +165,7 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu */}
             <div className="lg:hidden flex items-center">
               <button
                 onClick={() => setIsOffcanvasOpen(true)}
@@ -189,7 +191,7 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Mobile Offcanvas Menu */}
+      {/* Mobile Offcanvas */}
       <AnimatePresence>
         {isOffcanvasOpen && (
           <>
@@ -222,37 +224,38 @@ const Header = () => {
 
               <nav className="flex flex-col space-y-2">
                 {mainNavLinks.map((item) => (
-  <div key={item.name}>
-    <a
-      href={item.href}
-      className={`text-lg font-semibold transition-colors duration-200 ${
-        activeLink === item.name
-          ? "text-[#ce9e0e]"
-          : "text-gray-200 hover:text-[#b68d10]"
-      }`}
-      onClick={(e) => navigateTo(e, item.name, item.href)}
-    >
-      {item.name}
-    </a>
+                  <div key={item.name}>
+                    <button
+                      className={`text-lg font-semibold transition-colors duration-200 w-full text-left ${
+                        activeLink === item.name
+                          ? "text-[#ce9e0e]"
+                          : "text-gray-200 hover:text-[#b68d10]"
+                      }`}
+                      onClick={() =>
+                        setMobileDropdown(
+                          mobileDropdown === item.name ? null : item.name
+                        )
+                      }
+                    >
+                      {item.name}
+                    </button>
 
-    {/* Mobile Dropdown */}
-    {item.dropdown && (
-      <div className="ml-4 mt-2 flex flex-col space-y-1">
-        {item.dropdown.map((dropItem) => (
-          <Link
-            key={dropItem.name}
-            to={dropItem.path}
-            className="text-gray-200 hover:text-[#b68d10] px-2 py-1"
-            onClick={() => setIsOffcanvasOpen(false)}
-          >
-            {dropItem.name}
-          </Link>
-        ))}
-      </div>
-    )}
-  </div>
-))}
-
+                    {item.dropdown && mobileDropdown === item.name && (
+                      <div className="ml-4 mt-2 flex flex-col space-y-1">
+                        {item.dropdown.map((dropItem) => (
+                          <Link
+                            key={dropItem.name}
+                            to={dropItem.path}
+                            className="text-gray-200 hover:text-[#b68d10] px-2 py-1"
+                            onClick={() => setIsOffcanvasOpen(false)}
+                          >
+                            {dropItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
 
                 <div className="mt-8">
                   <a
@@ -269,7 +272,7 @@ const Header = () => {
         )}
       </AnimatePresence>
 
-      {/* Right Offcanvas Menu for Desktop */}
+      {/* Right Offcanvas */}
       <AnimatePresence>
         {isRightOffcanvasOpen && (
           <>
@@ -300,12 +303,13 @@ const Header = () => {
                 </button>
               </div>
 
-              {/* Contact Information */}
               <div className="mt-10 text-gray-300">
                 <h3 className="text-2xl font-bold text-white mb-6">Contact Us</h3>
                 <div className="space-y-6">
                   <div>
-                    <p className="text-lg font-semibold text-[#b68d10]">Office Address</p>
+                    <p className="text-lg font-semibold text-[#b68d10]">
+                      Office Address
+                    </p>
                     <p className="text-base">123/A, Miranda City Likaoli Prikano, Dope</p>
                   </div>
                   <div>
