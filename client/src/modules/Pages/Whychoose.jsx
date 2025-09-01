@@ -7,6 +7,7 @@ import {
   AiOutlineShop,
   AiOutlineTool,
 } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   { icon: <AiOutlineHome className="text-6xl" />, title: "Residence" },
@@ -18,6 +19,10 @@ const features = [
 ];
 
 const Whychoose = () => {
+  const navigate = useNavigate();
+  const handleenquiry =()=>{
+    navigate("/make-schedule")
+  }
   return (
     <div className="bg-[#bf9410] text-white py-16 px-4" id="whychoose">
       <div className="max-w-7xl mx-auto text-center">
@@ -56,12 +61,16 @@ const Whychoose = () => {
         </div>
 
        <div className="flex flex-col sm:flex-row justify-center gap-6">
-  <button className="bg-black text-white px-10 py-4 rounded-lg font-semibold flex items-center justify-center text-lg hover:bg-white hover:text-black transition">
+  <button onClick={handleenquiry} className="bg-black text-white px-10 py-4 rounded-lg font-semibold flex items-center justify-center text-lg hover:bg-white hover:text-black transition">
     Make Request <span className="ml-3">+</span>
   </button>
-  <button className="bg-white text-black px-10 py-4 rounded-lg font-semibold flex items-center justify-center text-lg hover:bg-black hover:text-white transition">
-    Free Tour <span className="ml-3">+</span>
-  </button>
+<a
+  href="#"
+  className="bg-white text-black px-10 py-4 rounded-lg font-semibold flex items-center justify-center text-lg hover:bg-black hover:text-white transition"
+>
+  Free Tour <span className="ml-3">+</span>
+</a>
+
 </div>
 
       </div>

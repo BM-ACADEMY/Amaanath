@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import Header from "./modules/Layout/Navbar";
 import Homesection from "./modules/Routes/Homesection";
-import Footer from "./modules/Pages/Footer";
 import { Buy } from "./modules/Pages/Buy/Buy";
 import { PropertyDetails } from "./modules/auth/PropertyDetails";
 import Uploadsection from "./modules/Admin/Uploadsection";
@@ -14,6 +13,8 @@ import { ScrollToTop } from "./modules/ScrollToTop";
 import { Sell } from "./modules/Pages/Sell/Sell";
 import ScrollToTopButton from "./modules/Layout/ScrollToTopButton";
 import { BusinessDeal } from "./modules/Pages/BusinessDeal/BusinessDeal";
+import EnquiryForm from "./modules/Layout/Enquiryform";
+import Footersection from "./modules/Pages/Footer";
 
 function App() {
   return (
@@ -41,9 +42,10 @@ function Layout() {
         <Route path="/sell" element={<Sell />} />
         <Route path="/business-deal" element={<BusinessDeal/>}/>
         <Route path="/admin" element={<Uploadsection />} />
+        <Route path="/make-schedule" element={<EnquiryForm />} />
       </Routes>
       {/* {!hideFooter && <Footer />} */}
- <Footer />
+ <Footersection />
     </>
   );
 }

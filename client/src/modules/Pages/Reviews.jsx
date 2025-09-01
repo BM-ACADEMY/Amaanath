@@ -6,14 +6,12 @@ const reviews = [
     id: 1,
     text: `D. Dowson found the product extremely useful and praised the excellent customer support. He recommends it to anyone looking for reliable solutions.`,
     name: "D. Dowson",
-    role: "Manager",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
   },
   {
     id: 2,
     text: `J. Smith appreciated the intuitive design and seamless performance. She mentioned that it greatly improved her daily workflow.`,
     name: "J. Smith",
-    role: "Developer",
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
   },
 ];
@@ -34,7 +32,7 @@ const UserFeedback = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const { text, name, role, avatar } = reviews[current];
+  const { text, name, avatar } = reviews[current];
 
   return (
     <div className="relative max-w-4xl mx-auto px-4 py-16 flex flex-col items-center" id="testimonials">
@@ -60,7 +58,6 @@ const UserFeedback = () => {
             className="w-16 h-16 rounded-full mb-2 border-2 border-yellow-500"
           />
           <h3 className="font-semibold text-lg font-quicksand">{name}</h3>
-          <span className="text-yellow-600 text-sm font-quicksand">{role}</span>
         </div>
       </div>
     </div>

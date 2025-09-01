@@ -7,6 +7,7 @@ import StatsSection from "../Pages/StatsSection";
 import LuxuryOverview from "../Pages/LuxuryOverview";
 import Whychoose from "../Pages/Whychoose";
 import UserFeedback from "../Pages/Reviews";
+import OurBrands from "../Pages/OurBrands";
 const Homesection = () => {
   return (
     <div>
@@ -16,6 +17,7 @@ const Homesection = () => {
       <LuxuryOverview/>
       <Whychoose/>
       <UserFeedback/>
+      <OurBrands/>
     </div>
   );
 };

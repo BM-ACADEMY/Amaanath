@@ -37,7 +37,7 @@ export const PropertyDetails = () => {
   const shareToWhatsApp = () => {
     if (!content) return;
 
-    const phoneNumber = "9952787198";
+    const phoneNumber = "+919600815824";
     const message = `
 Property Details (${section}):
 Code Name: ${content.code_name}

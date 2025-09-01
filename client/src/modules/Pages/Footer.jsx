@@ -4,35 +4,63 @@ import {
   FaPhone,
   FaMapMarkerAlt,
   FaFacebookF,
-  FaTwitter,
-  FaPinterestP,
   FaInstagram,
   FaYoutube,
 } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../assets/img/logo.png";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Same nav links used in Header
+  const mainNavLinks = [
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    {
+      name: "Services",
+      href: "#services",
+      dropdown: [
+        { name: "Buy", path: "/buy" },
+        { name: "Sell", path: "/sell" },
+        { name: "Business Deal", path: "/business-deal" },
+      ],
+    },
+    { name: "Why Choose", href: "#whychoose" },
+    { name: "Testimonials", href: "#testimonials" },
+  ];
+
+  // Reuse the scroll + navigate logic
+  const navigateTo = (e, href) => {
+    e.preventDefault();
+    if (href && href.startsWith("#")) {
+      if (location.pathname !== "/") {
+        navigate("/", { state: { scrollTo: href } });
+      } else {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          window.history.pushState(null, "", href);
+        }
+      }
+    } else {
+      navigate(href);
+    }
+  };
 
   return (
     <footer className="bg-black text-white">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {/* Column 1 */}
         <div>
           <div className="flex flex-col items-start mb-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 -1 8 1"
-              className="w-12 sm:w-16 h-2"
-            >
-              <path
-                d="M 0 0 L 1 -1 L 2 0 L 3 -1 L 4 0 L 5 -1 L 6 0 L 7 -1 L 8 0"
-                stroke="#f0b100"
-                strokeWidth="0.15"
-                fill="none"
-              />
-            </svg>
-            <h3 className="font-semibold text-lg mt-2">Landiox</h3>
+            
+            <Link to="/">
+                <img src={Logo} width={150} alt="Logo" />
+              </Link>
           </div>
           <p className="text-gray-400 text-sm mb-4">
             Real estate is private property in the form of buildings and land.
@@ -48,7 +76,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Column 2 */}
+        {/* Column 2 (Services / Navigation Links) */}
         <div>
           <div className="flex flex-col items-start mb-3">
             <svg
@@ -63,58 +91,45 @@ const Footer = () => {
                 fill="none"
               />
             </svg>
-            <h3 className="font-semibold text-lg mt-2">Services</h3>
+            <h3 className="font-semibold text-lg mt-2">Quick Links</h3>
           </div>
+
           <ul className="space-y-2 text-sm text-gray-400">
-            <li>&gt; About Us</li>
-            <li>&gt; Faq</li>
-            <li>&gt; Our Team</li>
-            <li>&gt; Blog Insights</li>
-            <li>&gt; Contact</li>
+            {mainNavLinks.map((item) =>
+              !item.dropdown ? (
+                <li key={item.name}>
+                  <a
+                    href={item.href}
+                    onClick={(e) => navigateTo(e, item.href)}
+                    className="hover:text-[#f0b100] transition"
+                  >
+                    &gt; {item.name}
+                  </a>
+                </li>
+              ) : (
+                <li key={item.name} className="space-y-1">
+                  <span className="text-gray-300 font-medium">
+                    &gt; {item.name}
+                  </span>
+                  <ul className="ml-4 space-y-1">
+                    {item.dropdown.map((drop) => (
+                      <li key={drop.name}>
+                        <Link
+                          to={drop.path}
+                          className="hover:text-[#f0b100] transition"
+                        >
+                          - {drop.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )
+            )}
           </ul>
         </div>
 
-        {/* Column 3 (Social Links instead of Newsletter) */}
-    <div>
- <div className="flex flex-col items-start mb-3">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -1 8 1"
-    className="w-12 sm:w-16 h-2"
-  >
-    <path
-      d="M 0 0 L 1 -1 L 2 0 L 3 -1 L 4 0 L 5 -1 L 6 0 L 7 -1 L 8 0"
-      stroke="#f0b100"
-      strokeWidth="0.15"
-      fill="none"
-    />
-  </svg>
-  <h3 className="font-semibold text-lg mt-2">Follow Us</h3>
-</div>
-
-  
-  {/* Social Icons in column */}
-  <div className="flex flex-col gap-3 text-sm mt-4">
-    <a href="#" className="hover:text-[#f0b100] flex items-center gap-2">
-      <FaFacebookF /> Facebook
-    </a>
-    <a href="#" className="hover:text-[#f0b100] flex items-center gap-2">
-      <FaTwitter /> Twitter
-    </a>
-    <a href="#" className="hover:text-[#f0b100] flex items-center gap-2">
-      <FaPinterestP /> Pinterest
-    </a>
-    <a href="#" className="hover:text-[#f0b100] flex items-center gap-2">
-      <FaInstagram /> Instagram
-    </a>
-    <a href="#" className="hover:text-[#f0b100] flex items-center gap-2">
-      <FaYoutube /> YouTube
-    </a>
-  </div>
-</div>
-
-
-        {/* Column 4 */}
+        {/* Column 3 (Social Links) */}
         <div>
           <div className="flex flex-col items-start mb-3">
             <svg
@@ -129,43 +144,53 @@ const Footer = () => {
                 fill="none"
               />
             </svg>
-            <h3 className="font-semibold text-lg">Instagram Feed</h3>
+            <h3 className="font-semibold text-lg mt-2">Follow Us</h3>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1332&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1332&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1332&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1332&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1332&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1332&auto=format&fit=crop",
-            ].map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt="feed"
-                className="w-20 h-20 object-cover rounded-sm"
-              />
-            ))}
+
+          <div className="flex flex-col gap-3 text-sm mt-4">
+            <a
+              href="https://www.facebook.com/share/1ZV36pRxUX/"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#f0b100] flex items-center gap-2"
+            >
+              <FaFacebookF /> Facebook
+            </a>
+            <a
+              href="https://www.instagram.com/al_amaanath?igsh=MWs5OWk0bGZnZGVyMQ=="
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#f0b100] flex items-center gap-2"
+            >
+              <FaInstagram /> Instagram
+            </a>
+            <a
+              href="https://youtube.com/@alamaanath?si=d2aNGkp8o7MTeXor"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[#f0b100] flex items-center gap-2"
+            >
+              <FaYoutube /> YouTube
+            </a>
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-     <div className="bg-[#f0b100] text-black text-sm py-4 flex justify-center items-center">
-  <p>
-    © {year}{" "}
-    <a
-      href="https://bmtechx.in"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="font-semibold hover:underline"
-    >
-      BMTechx.in
-    </a>. All rights reserved.
-  </p>
-</div>
-
+      <div className="bg-[#f0b100] text-black text-sm py-4 flex justify-center items-center">
+        <p>
+          © {year}{" "}
+          <a
+            href="https://bmtechx.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold hover:underline"
+          >
+            BMTechx.in
+          </a>
+          . All rights reserved.
+        </p>
+      </div>
     </footer>
   );
 };

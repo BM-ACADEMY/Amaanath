@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -64,7 +65,7 @@ const Header = () => {
         const element = document.querySelector(href);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
-          window.history.pushState(null, "", href);
+          window.history.pushState(null, "", href); // update hash in URL
         }
       }
     }
@@ -89,39 +90,58 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8 relative" ref={dropdownRef}>
+          <div
+            className="hidden lg:flex items-center space-x-8 relative"
+            ref={dropdownRef}
+          >
             {mainNavLinks.map((item) => (
               <div key={item.name} className="relative">
-                <button
-                  onClick={() =>
-                    setOpenDropdown(openDropdown === item.name ? null : item.name)
-                  }
-                  className={`text-base font-semibold transition-colors duration-200 ${
-                    activeLink === item.name
-                      ? "text-[#ce9e0e]"
-                      : "text-gray-200 hover:text-[#b68d10]"
-                  }`}
-                >
-                  {item.name}
-                </button>
+                {!item.dropdown ? (
+                  <button
+                    onClick={(e) => navigateTo(e, item.name, item.href)}
+                    className={`text-base font-semibold transition-colors duration-200 ${
+                      activeLink === item.name
+                        ? "text-[#ce9e0e]"
+                        : "text-gray-200 hover:text-[#b68d10]"
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === item.name ? null : item.name
+                        )
+                      }
+                      className={`text-base font-semibold transition-colors duration-200 ${
+                        activeLink === item.name
+                          ? "text-[#ce9e0e]"
+                          : "text-gray-200 hover:text-[#b68d10]"
+                      }`}
+                    >
+                      {item.name}
+                    </button>
 
-                {/* Dropdown */}
-                {item.dropdown && openDropdown === item.name && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-black shadow-lg rounded-md py-2 z-50">
-                    {item.dropdown.map((dropItem) => (
-                      <Link
-                        key={dropItem.name}
-                        to={dropItem.path}
-                        className="block px-4 py-2 text-gray-200 hover:text-[#b68d10] hover:bg-[#111111]"
-                        onClick={() => {
-                          setActiveLink(item.name);
-                          setOpenDropdown(null);
-                        }}
-                      >
-                        {dropItem.name}
-                      </Link>
-                    ))}
-                  </div>
+                    {openDropdown === item.name && (
+                      <div className="absolute top-full left-0 mt-2 w-48 bg-black shadow-lg rounded-md py-2 z-50">
+                        {item.dropdown.map((dropItem) => (
+                          <Link
+                            key={dropItem.name}
+                            to={dropItem.path}
+                            className="block px-4 py-2 text-gray-200 hover:text-[#b68d10] hover:bg-[#111111]"
+                            onClick={() => {
+                              setActiveLink(item.name);
+                              setOpenDropdown(null);
+                            }}
+                          >
+                            {dropItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             ))}
@@ -129,10 +149,9 @@ const Header = () => {
 
           {/* Right-side content */}
           <div className="flex items-center space-x-4">
-            <a
-              href="#"
+            <Link
+              to="/make-schedule"
               className="hidden lg:flex items-center justify-center space-x-2 bg-[#b68d10] text-white px-6 py-3 rounded-xl font-semibold transition duration-200 hover:bg-white hover:text-black"
-              onClick={(e) => navigateTo(e, "Make An Schedule", "#home")}
             >
               <span>Make An Schedule</span>
               <svg
@@ -151,7 +170,7 @@ const Header = () => {
                 <path d="M8 12h8" />
                 <path d="M12 8v8" />
               </svg>
-            </a>
+            </Link>
 
             <div className="hidden lg:block h-20 border-l border-[#d3d0c656]"></div>
 
@@ -212,7 +231,11 @@ const Header = () => {
             >
               <div className="flex justify-between items-center mb-6">
                 <div className="w-24 h-20 flex items-center justify-center">
-                  <img src={Logo} alt="Logo" className="max-w-full max-h-full" />
+                  <img
+                    src={Logo}
+                    alt="Logo"
+                    className="max-w-full max-h-full"
+                  />
                 </div>
                 <button
                   onClick={() => setIsOffcanvasOpen(false)}
@@ -225,46 +248,59 @@ const Header = () => {
               <nav className="flex flex-col space-y-2">
                 {mainNavLinks.map((item) => (
                   <div key={item.name}>
-                    <button
-                      className={`text-lg font-semibold transition-colors duration-200 w-full text-left ${
-                        activeLink === item.name
-                          ? "text-[#ce9e0e]"
-                          : "text-gray-200 hover:text-[#b68d10]"
-                      }`}
-                      onClick={() =>
-                        setMobileDropdown(
-                          mobileDropdown === item.name ? null : item.name
-                        )
-                      }
-                    >
-                      {item.name}
-                    </button>
-
-                    {item.dropdown && mobileDropdown === item.name && (
-                      <div className="ml-4 mt-2 flex flex-col space-y-1">
-                        {item.dropdown.map((dropItem) => (
-                          <Link
-                            key={dropItem.name}
-                            to={dropItem.path}
-                            className="text-gray-200 hover:text-[#b68d10] px-2 py-1"
-                            onClick={() => setIsOffcanvasOpen(false)}
-                          >
-                            {dropItem.name}
-                          </Link>
-                        ))}
-                      </div>
+                    {!item.dropdown ? (
+                      <button
+                        className={`text-lg font-semibold transition-colors duration-200 w-full text-left ${
+                          activeLink === item.name
+                            ? "text-[#ce9e0e]"
+                            : "text-gray-200 hover:text-[#b68d10]"
+                        }`}
+                        onClick={(e) => navigateTo(e, item.name, item.href)}
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className={`text-lg font-semibold transition-colors duration-200 w-full text-left ${
+                            activeLink === item.name
+                              ? "text-[#ce9e0e]"
+                              : "text-gray-200 hover:text-[#b68d10]"
+                          }`}
+                          onClick={() =>
+                            setMobileDropdown(
+                              mobileDropdown === item.name ? null : item.name
+                            )
+                          }
+                        >
+                          {item.name}
+                        </button>
+                        {mobileDropdown === item.name && (
+                          <div className="ml-4 mt-2 flex flex-col space-y-1">
+                            {item.dropdown.map((dropItem) => (
+                              <Link
+                                key={dropItem.name}
+                                to={dropItem.path}
+                                className="text-gray-200 hover:text-[#b68d10] px-2 py-1"
+                                onClick={() => setIsOffcanvasOpen(false)}
+                              >
+                                {dropItem.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 ))}
 
                 <div className="mt-8">
-                  <a
-                    href="#"
+                  <Link
+                    to="/make-schedule"
                     className="bg-[#b68d10] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#8e6e0d] transition duration-200 block text-center"
-                    onClick={(e) => navigateTo(e, "Support", "#home")}
                   >
                     Make An Schedule
-                  </a>
+                  </Link>
                 </div>
               </nav>
             </motion.div>
@@ -293,7 +329,11 @@ const Header = () => {
             >
               <div className="flex justify-between items-center mb-8">
                 <div className="w-28 h-24 flex items-center justify-center">
-                  <img src={Logo} alt="Logo" className="max-w-full max-h-full" />
+                  <img
+                    src={Logo}
+                    alt="Logo"
+                    className="max-w-full max-h-full"
+                  />
                 </div>
                 <button
                   onClick={() => setIsRightOffcanvasOpen(false)}
@@ -304,23 +344,58 @@ const Header = () => {
               </div>
 
               <div className="mt-10 text-gray-300">
-                <h3 className="text-2xl font-bold text-white mb-6">Contact Us</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">
+                  Contact Us
+                </h3>
                 <div className="space-y-6">
+                  {/* Address */}
                   <div>
                     <p className="text-lg font-semibold text-[#b68d10]">
                       Office Address
                     </p>
-                    <p className="text-base">123/A, Miranda City Likaoli Prikano, Dope</p>
+                    <p className="text-base">
+                      No: 252, 2nd floor, MG.ROAD, KOTTAKUPPAM, Vanur, Tamil
+                      Nadu 605104.
+                    </p>
                   </div>
+
+                  {/* Phone Numbers */}
                   <div>
-                    <p className="text-lg font-semibold text-[#b68d10]">Phone Number</p>
-                    <p className="text-base">+0989 7876 9865 9</p>
-                    <p className="text-base">+(090) 8765 86543</p>
+                    <p className="text-lg font-semibold text-[#b68d10]">
+                      Phone Number
+                    </p>
+                    <p className="text-base">
+                      <a
+                        href="tel:+919600815824"
+                        className="hover:underline hover:text-[#b68d10] transition"
+                      >
+                        +91 9600815824
+                      </a>
+                    </p>
+                    <p className="text-base">
+                      <a
+                        href="tel:+919677785856"
+                        className="hover:underline hover:text-[#b68d10] transition"
+                      >
+                        +91 9677785856
+                      </a>
+                    </p>
+                    
                   </div>
+
+                  {/* Emails */}
                   <div>
-                    <p className="text-lg font-semibold text-[#b68d10]">Email Address</p>
-                    <p className="text-base">info@example.com</p>
-                    <p className="text-base">example@info.com</p>
+                    <p className="text-lg font-semibold text-[#b68d10]">
+                      Email Address
+                    </p>
+                    <p className="text-base">
+                      <a
+                        href="mailto:alamaanath2025@gmail.com"
+                        className="hover:underline hover:text-[#b68d10] transition"
+                      >
+                        alamaanath2025@gmail.com
+                      </a>
+                    </p>
                   </div>
                 </div>
               </div>

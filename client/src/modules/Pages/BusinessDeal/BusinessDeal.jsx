@@ -22,6 +22,15 @@ export const BusinessDeal = () => {
     "Submit Your Proposal",
   ];
 
+  // ✅ Map headings to taglines
+  const taglines = {
+    "Partner With Us": "Join hands to grow together and achieve mutual success.",
+    "Work With Us": "Collaborate and build innovative solutions with our team.",
+    "Business Opportunities": "Explore exciting opportunities and expand your reach.",
+    "Promote & Branding": "Boost your brand visibility with our platform.",
+    "Submit Your Proposal": "Share your ideas and let’s bring them to life.",
+  };
+
   const handleButtonClick = (cat) => {
     setCategory(cat);
     setOpenForm(true);
@@ -51,7 +60,7 @@ Address: ${formData.address}
 Category: ${category}
 Free Time: ${formData.freeTime}`;
 
-    const whatsappUrl = `https://wa.me/9952787198?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/+919600815824?text=${encodeURIComponent(
       message
     )}`;
 
@@ -73,30 +82,29 @@ Free Time: ${formData.freeTime}`;
       <div className="relative mt-22 z-10 w-full max-w-6xl px-6 py-16">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Buttons Section */}
-         {/* Buttons Section */}
-<motion.div
-  initial={{ opacity: 1 }}
-  animate={{ opacity: 1 }}
-  className="flex flex-col gap-4 md:w-1/3"
->
-  {buttons.map((btn, idx) => {
-    const isActive = category === btn; // check if this button is selected
-    return (
-      <button
-        key={idx}
-        onClick={() => handleButtonClick(btn)}
-        className={`px-6 py-3 rounded-lg border text-base font-medium transition-all w-full
-          ${isActive 
-            ? "bg-[#b68d10] text-white border-[#b68d10] shadow-lg" 
-            : "bg-white/80 text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-lg hover:scale-105"
-          }`}
-      >
-        {btn}
-      </button>
-    );
-  })}
-</motion.div>
-
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col gap-4 md:w-1/3"
+          >
+            {buttons.map((btn, idx) => {
+              const isActive = category === btn;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleButtonClick(btn)}
+                  className={`px-6 py-3 rounded-lg border text-base font-medium transition-all w-full
+                    ${
+                      isActive
+                        ? "bg-[#b68d10] text-white border-[#b68d10] shadow-lg"
+                        : "bg-white/80 text-gray-800 border-gray-300 hover:bg-gray-100 hover:shadow-lg hover:scale-105"
+                    }`}
+                >
+                  {btn}
+                </button>
+              );
+            })}
+          </motion.div>
 
           {/* Form Section */}
           <AnimatePresence>
@@ -109,9 +117,12 @@ Free Time: ${formData.freeTime}`;
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="bg-white p-6 rounded-xl shadow-lg border md:w-1/2"
               >
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                  Fill Your Details ({category})
+                {/* ✅ Heading & tagline */}
+                <h2 className="text-2xl font-bold mb-2 text-gray-900">
+                  {category}
                 </h2>
+                <p className="text-gray-600 mb-6">{taglines[category]}</p>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <input
                     type="text"
@@ -140,7 +151,7 @@ Free Time: ${formData.freeTime}`;
                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#b68d10] outline-none"
                   />
                   <input
-                    type="text"
+                    type="time"
                     name="freeTime"
                     placeholder="Your free time"
                     value={formData.freeTime}

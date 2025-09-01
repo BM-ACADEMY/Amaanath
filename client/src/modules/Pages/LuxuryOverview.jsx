@@ -5,10 +5,12 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 import "swiper/css";
 import "swiper/css/navigation";
+import Slideiamge1 from '@/assets/img/slideimage1.png';
+import Slideiamge2 from '@/assets/img/slideimage2.png';
 
 const images = [
-  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1332&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1332&auto=format&fit=crop",
+  Slideiamge1,
+  Slideiamge2
 ];
 
 const LuxuryOverview = () => {
