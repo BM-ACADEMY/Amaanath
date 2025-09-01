@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import bgImage from "@/assets/img/enquiry.png"; 
 
 export const BusinessDeal = () => {
   const [openForm, setOpenForm] = useState(false);
@@ -72,7 +73,7 @@ Free Time: ${formData.freeTime}`;
       className="relative min-h-screen bg-cover bg-center flex items-center justify-center"
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80')",
+          `url(${bgImage})`,
       }}
     >
       {/* Overlay */}
